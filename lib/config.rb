@@ -3,6 +3,7 @@ Bundler.require
 
 require 'logger'
 require './db/connection'
+require './app/models/users'
 
 class SinatraApp < Sinatra::Base
   before { ActiveRecord::Base.verify_active_connections! }

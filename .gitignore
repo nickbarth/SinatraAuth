@@ -16,6 +16,6 @@ tmp
 .yardoc
 _yardoc
 doc/
-log/*
+logs/*
 tags
 *.sqlite
