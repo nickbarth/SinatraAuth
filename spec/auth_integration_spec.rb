@@ -4,6 +4,10 @@ describe 'Session Integration' do
   include Integration::Helpers
   let(:user) { Struct.new(:email, :password, :auth_token)['john@example.com', 'password', 'AUTH'] }
 
+  before(:all){ DatabaseCleaner.clean_with :truncation }
+  before(:each){ DatabaseCleaner.start }
+  after(:each){ DatabaseCleaner.clean }
+
   context '/join' do
     after(:all) { visit '/logout' }
 
