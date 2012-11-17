@@ -19,18 +19,10 @@ class User < ActiveRecord::Base
              auth_token: SecureRandom.urlsafe_base64
   end
 
-  # Adds a site under the current user
-  def add_site(site)
-    unless site[/http:\/\//].present? or site[/https:\/\//].present?
-      site[:url] = "http://#{site[:url]}"
-    end
-    sites.create(url: site[:url], host: URI(site[:url]).host)
-  end
-
   # Updates the users settings
   def update_settings(settings)
-    email = settings[:email]
-    password = settings[:password] unless settings[:password].empty?
+    self.email = settings[:email]
+    self.password = settings[:password] unless settings[:password].empty?
     save
   end
 end
