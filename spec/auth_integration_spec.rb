@@ -11,18 +11,18 @@ describe 'Session Integration' do
       visit '/join'
       fill_in 'user[email]', with: user.email
       fill_in 'user[password]', with: user.password
-      click_button 'Sign Up'
+      click_button 'Join'
       current_path.should == '/members'
-      page.should have_content 'Thanks for joining SinatraAuth!'
+      page.should have_content 'Thank you for becoming a member.'
     end
 
     it 'shows error on invalid users' do
       visit '/join'
       fill_in 'user[email]', with: 'invalid'
       fill_in 'user[password]', with: user.password
-      click_button 'Sign Up'
+      click_button 'Join'
       current_path.should == '/join'
-      page.should have_content 'Invalid email or password.'
+      page.should have_content 'Invalid email address or password.'
     end
   end
 
@@ -61,10 +61,9 @@ describe 'Session Integration' do
     end
 
     it 'allows user logout' do
-      page.should have_content 'Logout'
       visit '/logout'
       current_path.should == '/'
-      page.should have_no_content 'Logout'
+      page.should have_content 'Successfully logged out.'
     end
   end
 
@@ -88,7 +87,7 @@ describe 'Session Integration' do
       fill_in 'user[password]', with: 'newpassword'
       click_button 'Set Password'
       page.should have_content 'Password updated.'
-      current_path.should == '/sites'
+      current_path.should == '/members'
     end
 
     it 'shows an error when invalid' do
@@ -98,7 +97,7 @@ describe 'Session Integration' do
     end
   end
 
-  context '/account' do
+  context '/members/account' do
     after(:all) { visit '/logout' }
     before(:all) do
       User.create Hash[user.each_pair.to_a]
@@ -109,11 +108,11 @@ describe 'Session Integration' do
     end
 
     it 'should allow users to update settings' do
-      visit '/account'
+      visit '/members/account'
       fill_in 'user[email]', with: user.email
       fill_in 'user[password]', with: user.password
       click_button 'Update Settings'
-      current_path.should == '/account'
+      current_path.should == '/members/account'
       page.should have_content 'Your settings have been updated.'
     end
   end
