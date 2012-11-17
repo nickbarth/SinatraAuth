@@ -1,4 +1,4 @@
-# SinatraAuth
+# SinatraAuth [![Build Status](https://secure.travis-ci.org/nickbarth/SinatraAuth.png?branch=master)](https://travis-ci.org/nickbarth/SinatraAuth)
 
 This is an example implementation of authentication in Sinatra.
 It comes complete with integration, and unit tests using RSpec and Capybara, 
