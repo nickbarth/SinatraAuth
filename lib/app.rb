@@ -81,7 +81,7 @@ class SinatraApp
       session[:user_id] = current_user.id
       haml :reset
     else
-      raise 'Invalid email or auth token.'
+      flash[:notice] = 'Invalid email or auth token.'
     end
   end
 

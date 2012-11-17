@@ -80,9 +80,9 @@ describe 'Session Integration' do
   context '/reset' do
     after(:all) { visit '/logout' }
     before(:all) { User.create Hash[user.each_pair.to_a] }
+    let(:valid_user) { User.first }
 
     it 'updates a password when valid' do
-      valid_user = User.first
       visit "/reset/#{valid_user.email}/#{valid_user.auth_token}"
       fill_in 'user[password]', with: 'newpassword'
       click_button 'Set Password'
@@ -91,7 +91,6 @@ describe 'Session Integration' do
     end
 
     it 'shows an error when invalid' do
-      valid_user = User.first
       visit "/reset/#{valid_user.email}/invalid"
       page.should have_content 'Invalid email or auth token.'
       visit '/'
