@@ -1,6 +1,17 @@
 require './lib/config'
 
 class SinatraApp
+  helpers do
+    # Returns the current user or nil if none they are not logged in.
+    def current_user
+      @current_user ||= if session[:user_id]
+        User.find(session[:user_id])
+      else
+        @current_user
+      end
+    end
+  end
+
   # Home Page
   get '/' do
     haml :index
