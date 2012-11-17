@@ -80,7 +80,7 @@ describe 'Session Integration' do
   context '/reset' do
     after(:all) { visit '/logout' }
     before(:all) { User.create Hash[user.each_pair.to_a] }
-    let(:valid_user) { User.first }
+    let(:valid_user) { ->{User.first}.call }
 
     it 'updates a password when valid' do
       visit "/reset/#{valid_user.email}/#{valid_user.auth_token}"
