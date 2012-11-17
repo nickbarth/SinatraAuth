@@ -56,8 +56,8 @@ class SinatraApp
 
   # Log Out Page
   get '/logout' do
-    flash[:notice] = 'Successfully logged out.'
     session.clear
+    flash[:notice] = 'Successfully logged out.'
     redirect to('/')
   end
 
@@ -106,6 +106,6 @@ class SinatraApp
   post '/members/account' do
     current_user.update_settings(params[:user])
     flash[:notice] = 'Your settings have been updated.'
-    redirect to('/account')
+    redirect to('/members/account')
   end
 end
