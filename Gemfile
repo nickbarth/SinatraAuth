@@ -6,7 +6,6 @@ gem 'rack-flash3', require: 'rack-flash'
 gem 'haml', require: 'haml'
 gem 'bcrypt-ruby'
 gem 'sqlite3'
-gem 'thin'
 
 group :development do
   gem 'rspec'
