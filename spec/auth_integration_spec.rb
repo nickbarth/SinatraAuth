@@ -116,12 +116,4 @@ describe 'Session Integration' do
       page.should have_content 'Your settings have been updated.'
     end
   end
-
-  after(:each) do
-    if example.exception or page.status_code != 200
-      require 'capybara/util/save_and_open_page'
-      Capybara.save_page(page.body, 'exception_page.html')
-      raise 'Server Exception' if page.status_code != 200
-    end
-  end
 end
