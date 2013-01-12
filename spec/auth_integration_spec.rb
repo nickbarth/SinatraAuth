@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'Session Integration' do
   include Integration::Helpers
-  let(:user) { Struct.new(:email, :password, :auth_token)['john@example.com', 'password', 'AUTH'] }
+  let(:user) { Struct.new(:email, :password, :reset_token, :reset_time)['john@example.com', 'password', 'RESET', Time.now] }
 
   context '/join' do
     after(:all) { visit '/logout' }
@@ -83,7 +83,8 @@ describe 'Session Integration' do
     let(:valid_user) { User.first }
 
     it 'updates a password when valid' do
-      visit "/reset/#{valid_user.email}/#{valid_user.auth_token}"
+      visit "/reset/#{valid_user.email}/#{valid_user.reset_token}"
+      puts current_path
       fill_in 'user[password]', with: 'newpassword'
       click_button 'Set Password'
       page.should have_content 'Password updated.'
@@ -92,7 +93,14 @@ describe 'Session Integration' do
 
     it 'shows an error when invalid' do
       visit "/reset/#{valid_user.email}/invalid"
-      page.should have_content 'Invalid email or auth token.'
+      page.should have_content 'Invalid email or reset token.'
+      visit '/'
+    end
+
+    it 'shows an error when expired' do
+      valid_user.update_attribute :reset_time, 5.minutes.ago
+      visit "/reset/#{valid_user.email}/#{valid_user.reset_token}"
+      page.should have_content 'Invalid email or reset token.'
       visit '/'
     end
   end

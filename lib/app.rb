@@ -69,19 +69,23 @@ class SinatraApp
   # Receive Reset Password Request
   post '/reminder' do
     @current_user = User.find_by_email(params[:user][:email])
-    EmailSubscriber.new(current_user).reset_email if current_user
+    if current_user.present?
+      current_user.update_attributes reset_token: SecureRandom.urlsafe_base64,
+                                     reset_time:  Time.now
+      EmailSubscriber.new(current_user).reset_email
+    end
     flash[:notice] = 'Your password reset email has been sent.'
     redirect to('/reminder')
   end
 
   # New Password Page
-  get '/reset/:email/:auth_token' do
-    @current_user = User.find_by_reset(params[:email], params[:auth_token])
+  get '/reset/:email/:reset_token' do
+    @current_user = User.find_by_reset(params[:email], params[:reset_token])
     if current_user
       session[:user_id] = current_user.id
       haml :reset
     else
-      flash[:notice] = 'Invalid email or auth token.'
+      flash[:notice] = 'Invalid email or reset token.'
     end
   end
 

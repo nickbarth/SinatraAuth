@@ -16,7 +16,8 @@ ActiveRecord::Schema.define(:version => 20121117015428) do
   create_table "users", :force => true do |t|
     t.string   "email",           :default => ""
     t.string   "password_digest", :default => ""
-    t.string   "auth_token",      :default => ""
+    t.string   "reset_token",     :default => ""
+    t.datetime "reset_time"
     t.datetime "created_at",                      :null => false
     t.datetime "updated_at",                      :null => false
   end

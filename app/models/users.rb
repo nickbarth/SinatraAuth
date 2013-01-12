@@ -5,18 +5,20 @@ class User < ActiveRecord::Base
   validates :password, presence: true, on: :create
   validates_format_of :email, :with => /@.+\./
 
-  # Finds a user by their auth token and email
-  def self.find_by_reset(email, auth_token)
-    find_by_email_and_auth_token(email, auth_token).tap do |user|
-      user.update_attribute(:auth_token, SecureRandom.urlsafe_base64) if user.present?
+  # Finds a user by their reset token and email
+  def self.find_by_reset(email, reset_token)
+    current_user = find_by_email_and_reset_token(email, reset_token)
+    if current_user.present? and current_user.reset_time > 5.minutes.ago
+      current_user
+    else
+      nil
     end
   end
 
   # Creates a new user
   def self.create_subscriber(user)
-    User.new email:      user[:email],
-             password:   user[:password],
-             auth_token: SecureRandom.urlsafe_base64
+    User.new email:       user[:email],
+             password:    user[:password]
   end
 
   # Updates the users settings

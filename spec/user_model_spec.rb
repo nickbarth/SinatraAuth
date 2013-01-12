@@ -1,19 +1,25 @@
 require 'spec_helper'
 
 describe 'User Model' do
-  let(:user) { Struct.new(:email, :password, :auth_token)['john@example.com', 'password', 'AUTH'] }
+  let(:user) { Struct.new(:email, :password, :reset_token, :reset_time)['john@example.com', 'password', 'RESET', Time.now] }
 
   context 'self#find_by_reset' do
-    it 'should find by email and auth token and update attributes' do
-      test_user = stub
-      test_user.should_receive(:update_attribute)
-      User.should_receive(:find_by_email_and_auth_token).
-        with(user.email, user.auth_token).and_return(test_user)
-      User.find_by_reset(user.email, user.auth_token)
+    before(:all) do
+      User.create Hash[user.each_pair.to_a]
+    end
+
+    it 'should find by email and reset token' do
+      User.first.update_attribute :reset_time, Time.now
+      User.find_by_reset(user.email, user.reset_token).should be_a(User)
     end
 
     it 'should return nil on fail' do
       User.find_by_reset('', '').should == nil
+    end
+
+    it 'should return nil on expired reset_time' do
+      User.first.update_attribute :reset_time, 5.minutes.ago
+      User.find_by_reset(user.email, user.reset_token).should == nil
     end
   end
 
