@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe 'User Model' do
+  include Model::Helpers
   let(:user) { Struct.new(:email, :password, :reset_token, :reset_time)['john@example.com', 'password', 'RESET', Time.now] }
 
   context 'self#find_by_reset' do

@@ -12,6 +12,5 @@ group :development do
   gem 'rspec'
   gem 'debugger'
   gem 'capybara'
-  gem 'database_cleaner'
   gem 'rake-ar'
 end
